@@ -25,7 +25,7 @@ urlpatterns = [
     # TODO: complete paths
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-
+    # path('', )
     path('users/', views.UserList.as_view()),
     path('users/<int:pk>/', views.UserDetail.as_view()),
     path('achievements/', views.AchievementList.as_view()),

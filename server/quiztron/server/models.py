@@ -35,6 +35,8 @@ class Quiz(models.Model):
     theme = models.ManyToManyField("Theme", through='ThemeOfQuiz')
     url = models.URLField(default='No url provided')
 
+    def __str__(self):
+        return self.name
 
 class User(models.Model):
     name = models.CharField(max_length=32)
