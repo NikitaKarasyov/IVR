@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/src/pages/home_page.dart';
 import '../utils/fetch.dart';
 import '../models/user.dart';
 
@@ -12,10 +13,10 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  String? username;
-  String? email;
-  String? password;
-  String? confirmPassword;
+  String username = "";
+  String email = "";
+  String password = "";
+  String confirmPassword = "";
 
   bool _obscureText = true;
 
@@ -143,15 +144,19 @@ class _SignUpPageState extends State<SignUpPage> {
                         if (password == confirmPassword && !found) {
                           User new_user = User(
                               id: users.length,
-                              name: username!,
-                              email: email!,
-                              password: password!,
+                              name: username,
+                              email: email,
+                              password: password,
                               contact: "",
                               currentPoints: 0,
                               participating: [],
                               achievements: [],
                               points: []);
                           UserFetch().postUser(new_user);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomePage(new_user)));
                         }
                       },
                       child: Text('Sign up')),

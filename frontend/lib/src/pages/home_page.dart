@@ -36,22 +36,6 @@ class _HomePageState extends State<HomePage> {
   _HomePageState(this.user);
   void fetchData() async {
     try {
-      // http.Response user_response = await http.get(Uri.parse(api_users));
-      // var user_data = json.decode(user_response.body);
-      // user_data.forEach((user) {
-      //   User u = User(
-      //       id: user['id'],
-      //       name: user['name'],
-      //       email: user['email'],
-      //       password: user['password'],
-      //       contact: user['contact'],
-      //       currentPoints: user['current_points'],
-      //       participating: user['participating'],
-      //       achievements: user['achievements'],
-      //       points: user['points']);
-      //   users.add(u);
-      // });
-
       http.Response quizResponse = await http.get(Uri.parse(api_quizes));
       var quizData = json.decode(quizResponse.body);
       print(quizData);

@@ -6,7 +6,7 @@ import '../constants/api.dart';
 import 'dart:convert';
 
 class UserFetch {
-  final User user = User.UserDefault();
+  // final User user = User.UserDefault();
   List<User> users = [];
   http.Response? response;
   UserFetch() {
@@ -62,6 +62,27 @@ class UserFetch {
       });
       print(response.headers);
       // print(response.body);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> putUser(int id) async {
+    final UserFetch uf = UserFetch();
+    List<User> temp_users = uf.getAll();
+    var endpoint = api_users;
+
+    users.forEach((element) {
+      element.output();
+    });
+    var data = temp_users[id].getData();
+    print(json.encode(data));
+    try {
+      var response = await http
+          .put(Uri.parse(api_users), body: json.encode(data), headers: {
+        "Content-Type": "application/json",
+        "Authorization": "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
+      });
     } catch (e) {
       print(e);
     }

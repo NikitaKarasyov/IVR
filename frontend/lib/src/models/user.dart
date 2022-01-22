@@ -40,9 +40,24 @@ class User {
     print('name $name');
     print('password $password');
     print('email $email');
+    print('contact $contact');
     print('current points $currentPoints');
     print('achievements $achievements');
     print('points ${points.runtimeType}');
     print('participating $participating');
+  }
+
+  getData() {
+    return {
+      "id": id,
+      "name": name,
+      "email": email,
+      "password": password,
+      "contact": contact,
+      "current_points": currentPoints,
+      "achievements": achievements,
+      "points": points,
+      "participating": participating
+    };
   }
 }

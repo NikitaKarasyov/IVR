@@ -20,21 +20,7 @@ class PointWeek extends StatelessWidget {
                     fontSize: 20,
                   )),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                  width: double.infinity,
-                  height: 120,
-                  child: _BarChart(weekPoints)),
-            ),
             CustomBarChart(weekPoints),
-            // _genRow("mn", 2),
-            // _genRow("ts", 2),
-            // _genRow("wd", 3),
-            // _genRow("th", 2),
-            // _genRow("fr", 2),
-            // _genRow("st", 10),
-            // _genRow("sd", 1)
           ],
         ),
       ),
@@ -57,7 +43,6 @@ class _BarChart extends StatelessWidget {
         alignment: BarChartAlignment.spaceAround,
         // maxY: 20,
       ),
-      
     );
   }
 
@@ -129,7 +114,7 @@ class _BarChart extends StatelessWidget {
           x: 0,
           barRods: [
             BarChartRodData(
-                y: weekData[0],
+                y: weekData.isNotEmpty ? weekData[0] : 0,
                 width: 25,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
@@ -140,7 +125,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[1],
+                y: weekData.isNotEmpty ? weekData[1] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -150,7 +135,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[2],
+                y: weekData.isNotEmpty ? weekData[2] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -160,7 +145,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[3],
+                y: weekData.isNotEmpty ? weekData[3] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -170,7 +155,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[4],
+                y: weekData.isNotEmpty ? weekData[4] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -180,7 +165,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[5],
+                y: weekData.isNotEmpty ? weekData[5] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -190,7 +175,7 @@ class _BarChart extends StatelessWidget {
           barRods: [
             BarChartRodData(
                 width: 25,
-                y: weekData[6],
+                y: weekData.isNotEmpty ? weekData[6] : 0,
                 colors: [Colors.lightBlueAccent, Colors.greenAccent])
           ],
           showingTooltipIndicators: [0],
@@ -217,7 +202,7 @@ class CustomBarChartState extends State<CustomBarChart> {
         child: Card(
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          color: Colors.transparent,
+          color: Colors.grey,
           child: _BarChart(weekData),
         ));
   }
