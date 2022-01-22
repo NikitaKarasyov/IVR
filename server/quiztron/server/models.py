@@ -32,7 +32,7 @@ class Quiz(models.Model):
         default="It looks, like this quiz does not have a description"
     )
     date = models.DateTimeField(default=datetime(1970, 1, 1), editable=True)
-    theme = models.ManyToManyField("Theme", through='ThemeOfQuiz')
+    themes = models.ManyToManyField("Theme", through='ThemeOfQuiz',related_name='themes')
     url = models.URLField(default='No url provided')
 
     def __str__(self):
@@ -42,7 +42,7 @@ class User(models.Model):
     name = models.CharField(max_length=32)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=32)
-    contact = models.CharField(max_length=100, default='')
+    contact = models.CharField(max_length=100, blank=True)
     current_points = models.IntegerField(default=0)
     points = models.ManyToManyField(Point, through='PointOfUser', related_name='points')
     achievements = models.ManyToManyField(Achievement, through='AchievementOfUser', related_name='achievements')

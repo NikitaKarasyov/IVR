@@ -1,42 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/src/models/quiz.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../constants/api.dart';
+
 import '../models/user.dart';
 // import '../models/quiz.dart';
 import '../models/achievement.dart';
 
+import '../widgets/quiz_card.dart';
+
+import 'profile_page.dart';
+
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final User user;
+  const HomePage(this.user, {Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(user);
 }
 
 class _HomePageState extends State<HomePage> {
   List<User> users = [];
+  List<Quiz> quizes = [];
   bool isLoading = true;
+  int _selectedIndex = 0;
+  User user;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
+  _HomePageState(this.user);
   void fetchData() async {
     try {
-      http.Response user_response = await http.get(Uri.parse(api_users));
-      var user_data = json.decode(user_response.body);
-      print(user_data);
-      user_data.forEach((user) {
-        User u = User(
-            id: user['id'],
-            name: user['name'],
-            email: user['email'],
-            password: user['password'],
-            contact: user['contact'],
-            currentPoints: user['current_points'],
-            participating: user['participating'],
-            achievements: user['achievements'],
-            points: user['points']);
-        users.add(u);
+      // http.Response user_response = await http.get(Uri.parse(api_users));
+      // var user_data = json.decode(user_response.body);
+      // user_data.forEach((user) {
+      //   User u = User(
+      //       id: user['id'],
+      //       name: user['name'],
+      //       email: user['email'],
+      //       password: user['password'],
+      //       contact: user['contact'],
+      //       currentPoints: user['current_points'],
+      //       participating: user['participating'],
+      //       achievements: user['achievements'],
+      //       points: user['points']);
+      //   users.add(u);
+      // });
+
+      http.Response quizResponse = await http.get(Uri.parse(api_quizes));
+      var quizData = json.decode(quizResponse.body);
+      print(quizData);
+      quizData.forEach((quiz) {
+        Quiz q = Quiz(
+            id: quiz['id'],
+            name: quiz['name'],
+            description: quiz['description'],
+            date: DateTime.parse(quiz['date']),
+            quiz_theme: quiz['themes'],
+            url: quiz['url']);
+        quizes.add(q);
       });
-      print(users.length);
+      print(quizes);
+      print(quizes.length);
       setState(() {
         isLoading = false;
       });
@@ -44,6 +74,8 @@ class _HomePageState extends State<HomePage> {
       print("Exception happened. See the full trace: \n$e");
     }
   }
+
+  List<Widget> _subpages = [];
 
   @override
   void initState() {
@@ -53,6 +85,46 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: [
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : RefreshIndicator(
+                    child: ListView(
+                        children: quizes.map((e) {
+                      return QuizCard(
+                        id: e.id,
+                        name: e.name,
+                        description: e.description,
+                        date: e.date,
+                        theme: e.quiz_theme,
+                        url: e.url,
+                        // currentUser: currentUser,
+                      );
+                    }).toList()),
+                    onRefresh: _refresh,
+                  ),
+            ProfilePage(user)
+          ].elementAt(_selectedIndex)),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Browse"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: "Account")
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+    );
+  }
+
+  Future<void> _refresh() {
+    print('refreshing');
+    quizes = [];
+    users = [];
+    fetchData();
+    return Future.delayed(Duration(seconds: 5));
   }
 }

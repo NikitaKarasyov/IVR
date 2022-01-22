@@ -13,6 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: any
+  charts_flutter: 
+  fl_chart: 
   flutter_localizations:
     sdk: flutter
 

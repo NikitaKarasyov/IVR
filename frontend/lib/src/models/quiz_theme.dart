@@ -1,7 +1,7 @@
-class Theme {
+class QuizTheme {
   int id;
   String name;
-  Theme({
+  QuizTheme({
     required this.id,
     required this.name,
   });

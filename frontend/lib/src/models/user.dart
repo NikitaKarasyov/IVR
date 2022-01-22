@@ -23,4 +23,26 @@ class User {
     required this.achievements,
     required this.points,
   });
+
+  static User UserDefault() => User(
+      id: 0,
+      name: "",
+      email: "",
+      password: "",
+      contact: "",
+      currentPoints: 0,
+      participating: [],
+      achievements: [],
+      points: []);
+
+  output() {
+    print('id $id');
+    print('name $name');
+    print('password $password');
+    print('email $email');
+    print('current points $currentPoints');
+    print('achievements $achievements');
+    print('points ${points.runtimeType}');
+    print('participating $participating');
+  }
 }

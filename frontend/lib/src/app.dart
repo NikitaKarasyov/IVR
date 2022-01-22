@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/src/pages/login_page.dart';
 import 'pages/home_page.dart';
 
 class App extends StatelessWidget {
@@ -7,6 +8,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false, title: 'Quiztron', home: HomePage());
+        debugShowCheckedModeBanner: false, title: 'Quiztron', home: AuthPage());
   }
 }

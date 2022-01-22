@@ -16,23 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from server import views
+from rest_framework.authtoken import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 
 urlpatterns = [
-    # TODO: complete paths
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    # path('', )
-    path('users/', views.UserList.as_view()),
-    path('users/<int:pk>/', views.UserDetail.as_view()),
-    path('achievements/', views.AchievementList.as_view()),
-    path('achievements/<int:pk>/', views.AchievementDetail.as_view()),
-    path('quizes/', views.QuizList.as_view()),
-    path('quizes/<int:pk>/', views.QuizDetail.as_view()),
-
+    path('api-token-auth/', views.obtain_auth_token, name='api-auth-token'),
+    path('api/', include('server.urls', 'server')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns = format_suffix_patterns(urlpatterns)
