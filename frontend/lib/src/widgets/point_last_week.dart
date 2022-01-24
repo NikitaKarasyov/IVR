@@ -42,7 +42,10 @@ class _BarChart extends StatelessWidget {
         barGroups: barGroups,
         alignment: BarChartAlignment.spaceAround,
         // maxY: 20,
+        gridData:
+            FlGridData(drawHorizontalLine: false, drawVerticalLine: false),
       ),
+      swapAnimationCurve: Curves.easeIn,
     );
   }
 
@@ -51,7 +54,9 @@ class _BarChart extends StatelessWidget {
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.transparent,
           tooltipPadding: const EdgeInsets.all(0),
-          tooltipMargin: 8,
+          tooltipMargin: 0,
+          fitInsideHorizontally: true,
+          fitInsideVertically: true,
           getTooltipItem: (
             BarChartGroupData group,
             int groupIndex,
@@ -61,7 +66,7 @@ class _BarChart extends StatelessWidget {
             return BarTooltipItem(
               rod.y.round().toString(),
               const TextStyle(
-                color: Colors.white,
+                color: Color(0xff7589a2),
                 fontWeight: FontWeight.bold,
               ),
             );
@@ -201,9 +206,11 @@ class CustomBarChartState extends State<CustomBarChart> {
         aspectRatio: 1.7,
         child: Card(
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          color: Colors.grey,
-          child: _BarChart(weekData),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          color: Colors.grey.shade200,
+          child: Container(
+              margin: const EdgeInsets.only(top: 18),
+              child: _BarChart(weekData)),
         ));
   }
 }

@@ -6,7 +6,7 @@ import 'package:frontend/src/utils/fetch.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/sum_points.dart';
 import '../widgets/point_last_week.dart';
-
+import '../widgets/rating.dart';
 import '../models/user.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -21,10 +21,9 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   _ProfilePageState(this.user);
   User user;
-  List<User> users = [];
   late ScrollController _controller;
   final UserFetch userfetchInstance = UserFetch();
-
+  late List<User> users;
   _scrollListener() {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
@@ -43,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     _controller = ScrollController();
+    users = userfetchInstance.getAll();
     _controller.addListener(_scrollListener); //the listener for up and down.
     super.initState();
   }
@@ -56,7 +56,8 @@ class _ProfilePageState extends State<ProfilePage> {
     return ans;
   }
 
-  Widget _userStats() {
+  Widget _userStatsPoints() {
+    users = userfetchInstance.getAll();
     return ListView(
       controller: _controller,
       shrinkWrap: true,
@@ -68,16 +69,10 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisCount: 2,
           shrinkWrap: true,
           children: [
-            AllPoints(user.currentPoints),
-            Container(
-              child: Text("data"),
-              color: Colors.amber,
-            ),
-            Container(
-              child: Text("data"),
-              color: Colors.amber,
-            ),
-            Container(child: Text("data"), color: Colors.amber),
+            SizedBox(
+                width: 100, height: 100, child: AllPoints(user.currentPoints)),
+            SizedBox(width: 100, height: 100, child: CustomRating(user.id)),
+            //todo: implement something more
           ],
         ),
         PointWeek(getDoubles(user.points)),
@@ -145,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ))
                   : Text(user.contact)),
           Divider(),
-          _userStats()
+          _userStatsPoints()
         ],
       ),
     ));
@@ -173,7 +168,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     focusColor: Colors.cyan,
                     filled: true,
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(8))),
+                        borderRadius:
+                            const BorderRadius.all(const Radius.circular(8))),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty)

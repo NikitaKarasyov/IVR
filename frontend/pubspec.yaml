@@ -15,6 +15,7 @@ dependencies:
   http: any
   charts_flutter: 
   fl_chart: 
+  flutter_svg_provider: 
   flutter_localizations:
     sdk: flutter
 
@@ -33,3 +34,4 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/auth/

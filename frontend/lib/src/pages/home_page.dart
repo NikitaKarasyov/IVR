@@ -8,13 +8,12 @@ import '../constants/api.dart';
 import '../models/user.dart';
 // import '../models/quiz.dart';
 import '../models/achievement.dart';
-
 import '../widgets/quiz_card.dart';
-
 import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
+
   const HomePage(this.user, {Key? key}) : super(key: key);
 
   @override

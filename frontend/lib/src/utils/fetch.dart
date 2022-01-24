@@ -13,7 +13,32 @@ class UserFetch {
     _fetchData();
   }
 
-  List<User> getAll() => users;
+  getAll() => users;
+
+  Future<List<User>> getAllAsync() async {
+    List<User> _users = [];
+    try {
+      http.Response userResponse = await http.get(Uri.parse(api_users));
+      var userData = json.decode(userResponse.body);
+      userData.forEach((user) {
+        User u = User(
+          id: user['id'],
+          name: user['name'],
+          email: user['email'],
+          password: user['password'],
+          contact: user['contact'],
+          currentPoints: user['current_points'],
+          participating: user['participating'],
+          achievements: user['achievements'],
+          points: user['points'],
+        );
+        _users.add(u);
+      });
+    } catch (e) {
+      print(e);
+    }
+    return _users;
+  }
 
   _fetchData() async {
     try {
@@ -87,4 +112,7 @@ class UserFetch {
       print(e);
     }
   }
+
+  sortByPoints(List<User> tmp_users) =>
+      tmp_users.sort((a, b) => a.currentPoints.compareTo(b.currentPoints));
 }
