@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<Color> colors = [
+List<Color> pasteleColors = [
   Color(0x81de86),
   Color(0xe6bbf4),
   Color(0x8bbab9),

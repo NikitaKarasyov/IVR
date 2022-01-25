@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import '../widgets/top10.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -81,6 +81,75 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         PointWeek(getDoubles(user.points)),
         // Flexible(child: child)
+        // TopTen(user: user, users: users),
+        Text('Top 10: ', style: TextStyle(fontSize: 30)),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test13",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test12",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test1",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test3",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                "test2",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test8",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test10",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test4",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("test5",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("admin",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 22)),
+            ),
+          ],
+        )
       ],
     );
   }

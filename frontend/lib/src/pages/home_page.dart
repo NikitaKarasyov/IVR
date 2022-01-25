@@ -25,6 +25,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Random _random = Random();
+  late List<QuizTheme> themePredicate;
+  late DateTime datePredicate;
   List<User> users = [];
   List<Quiz> quizes = [];
   bool isLoading = true;
@@ -68,6 +71,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     fetchData();
+    themePredicate = ThemeFetch().themes;
+    datePredicate = DateTime.now();
+    datePredicate.add(const Duration(days: 365));
     super.initState();
     // _controller = TabController(length: 2, vsync: this);
   }
@@ -94,18 +100,38 @@ class _HomePageState extends State<HomePage> {
                               alignment: Alignment.centerRight,
                               child: IconButton(
                                   onPressed: () => _show(),
-                                  icon: Icon(Icons.filter_list))),
+                                  icon: const Icon(Icons.filter_list))),
                           Expanded(
                             child: ListView(
-                                children: quizes.map((e) {
-                              return QuizCard(
-                                id: e.id,
-                                name: e.name,
-                                description: e.description,
-                                date: e.date,
-                                theme: e.quiz_theme,
-                                url: e.url,
-                                currentUser: user,
+                                children: quizes.map<Widget>((e) {
+                              for (Map<String, dynamic> item in e.quiz_theme) {
+                                QuizTheme _tmp = QuizTheme(
+                                    id: item['id'], name: item['name']);
+                                for (var item2 in themePredicate) {
+                                  if (item2.id == _tmp.id) {
+                                    if (e.date.isAfter(datePredicate))
+                                      return QuizCard(
+                                        id: e.id,
+                                        name: e.name,
+                                        description: e.description,
+                                        date: e.date,
+                                        theme: e.quiz_theme,
+                                        url: e.url,
+                                        currentUser: user,
+                                      );
+                                  }
+                                }
+
+                                return Container(
+                                  width: 0,
+                                  height: 0,
+                                  child: Text(''),
+                                );
+                              }
+                              return Container(
+                                width: 0,
+                                height: 0,
+                                child: Text(''),
                               );
                             }).toList()),
                           ),
@@ -146,11 +172,21 @@ class _HomePageState extends State<HomePage> {
               child: DefaultTabController(
                   length: 2,
                   child: SizedBox(
-                    height: 600,
+                    height: 300,
                     width: 300,
                     child: Scaffold(
                         appBar: AppBar(
-                          bottom: TabBar(tabs: [Text('theme'), Text('date')]),
+                          backgroundColor: Colors.white,
+                          title: TabBar(indicatorColor: Colors.cyan, tabs: [
+                            Text(
+                              'theme',
+                              style: const TextStyle(color: Colors.cyan),
+                            ),
+                            Text(
+                              'date',
+                              style: const TextStyle(color: Colors.cyan),
+                            )
+                          ]),
                         ),
                         body: TabBarView(children: [
                           FutureBuilder<List<QuizTheme>>(
@@ -163,40 +199,105 @@ class _HomePageState extends State<HomePage> {
                                   return Wrap(
                                       children:
                                           snapshot.data.map<Widget>((element) {
-                                    return FilterChip(
-                                      backgroundColor: colors[
-                                          Random().nextInt(colors.length)],
-                                      label: Text(element.name.toString()),
-                                      onSelected: (value) => null,
+                                    bool _selected = false;
+                                    return Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 6),
+                                      color: pasteleColors[_random
+                                          .nextInt(pasteleColors.length)],
+                                      child: FilterChip(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 6, vertical: 3),
+                                        selectedColor: Colors.amber,
+
+                                        elevation: 10,
+                                        selected: _selected,
+                                        backgroundColor: Colors.transparent,
+                                        // backgroundColor: pasteleColors[_random
+                                        //     .nextInt(pasteleColors.length)],
+                                        label: Text(element.name.toString()),
+                                        onSelected: (bool selected) =>
+                                            setState(() {
+                                          filter(element);
+                                          _selected = !_selected;
+                                        }),
+                                      ),
                                     );
                                   }).toList());
                                 else
                                   return CircularProgressIndicator();
                               }),
-                          ListView(
-                            shrinkWrap: true,
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              TextButton.icon(
-                                  onPressed: null,
-                                  icon: const Icon(Icons.date_range),
-                                  label: const Text("The nearest day")),
-                              TextButton.icon(
-                                  onPressed: null,
-                                  icon: Icon(Icons.date_range),
-                                  label: const Text('At weekend')),
-                              TextButton.icon(
-                                  onPressed: () => showTimePicker(
-                                      context: context,
-                                      initialTime:
-                                          TimeOfDay(hour: 4, minute: 20),
-                                      initialEntryMode:
-                                          TimePickerEntryMode.input),
-                                  icon: Icon(Icons.calendar_today),
-                                  label: Text("Pick a day"))
+                              Container(
+                                alignment: Alignment.center,
+                                width: 200,
+                                child: TextButton.icon(
+                                    onPressed: () => nearestDay(),
+                                    icon: const Icon(Icons.upgrade),
+                                    label: const Text("The nearest day")),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: 200,
+                                child: TextButton.icon(
+                                    onPressed: () => atWeekend(),
+                                    icon: Icon(Icons.upgrade),
+                                    label: const Text('At weekend')),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                width: 200,
+                                child: TextButton.icon(
+                                    onPressed: () => _selectDate(context),
+                                    icon: Icon(Icons.calendar_today),
+                                    label: Text("Pick a day")),
+                              )
                             ],
                           )
                         ])),
                   )));
         });
+  }
+
+  filter(QuizTheme quiztheme) {
+    setState(() {
+      if (themePredicate
+          .firstWhere((element) => element.id == quiztheme.id)
+          .toString()
+          .isNotEmpty)
+        themePredicate.remove(
+            themePredicate.firstWhere((element) => element.id == quiztheme.id));
+      else
+        themePredicate.add(quiztheme);
+    });
+  }
+
+  nearestDay() {
+    setState(() {
+      datePredicate = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+    });
+  }
+
+  atWeekend() => setState(() {
+        DateTime(DateTime.now().year, DateTime.now().month,
+            DateTime.now().day - DateTime.now().weekday % 7);
+      });
+
+  _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2021, 3, 25), // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+
+    if (picked != null && picked != datePredicate) {
+      setState(() {
+        datePredicate = picked;
+      });
+    }
   }
 }

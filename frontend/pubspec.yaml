@@ -15,6 +15,7 @@ dependencies:
   http: any
   charts_flutter: 
   fl_chart: 
+  flutter_datetime_picker: 
   flutter_svg_provider: 
   flutter_localizations:
     sdk: flutter
