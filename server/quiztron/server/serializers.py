@@ -81,3 +81,9 @@ class AchievementOfUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = AchievementOfUser
         fields = "__all__"
+
+
+class UserOfQuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserOfQuiz
+        fields = "__all__"

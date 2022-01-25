@@ -1,6 +1,7 @@
 from server.models import *
 from server.serializers import AchievementRelatedSerializer, UserSerializer, AchievementSerializer, QuizSerializer, \
-    PointOfUserSerializer, QuizOfUserSerializer, ThemeOfQuizSerializer, AchievementOfUserSerializer
+    PointOfUserSerializer, QuizOfUserSerializer, ThemeOfQuizSerializer, AchievementOfUserSerializer, \
+    UserOfQuizSerializer
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 import requests
@@ -92,3 +93,13 @@ class PointOfUserList(generics.ListCreateAPIView):
 class PointOfUserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PointOfUser.objects.all()
     serializer_class = PointOfUserSerializer
+
+
+class UserOfQuizList(generics.ListCreateAPIView):
+    queryset = UserOfQuiz.objects.all()
+    serializer_class = UserOfQuizSerializer
+
+
+class UserOfQuizDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserOfQuiz.objects.all()
+    serializer_class = UserOfQuizSerializer

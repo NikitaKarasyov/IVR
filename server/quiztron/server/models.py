@@ -34,9 +34,11 @@ class Quiz(models.Model):
     date = models.DateTimeField(default=datetime(1970, 1, 1), editable=True)
     themes = models.ManyToManyField("Theme", through='ThemeOfQuiz',related_name='themes')
     url = models.URLField(default='No url provided')
+    companies = models.ManyToManyField('User', through='UserOfQuiz', related_name='companies')
 
     def __str__(self):
         return self.name
+
 
 class User(models.Model):
     name = models.CharField(max_length=32)
@@ -69,4 +71,9 @@ class QuizOfUser(models.Model):
 
 class ThemeOfQuiz(models.Model):
     theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
+
+
+class UserOfQuiz(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
