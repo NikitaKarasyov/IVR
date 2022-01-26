@@ -1,13 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frontend/src/constants/api.dart';
-import 'package:frontend/src/utils/fetch.dart';
 import 'package:http/http.dart' as http;
-import '../widgets/sum_points.dart';
+
+import 'package:frontend/src/constants/api.dart';
+import 'package:frontend/src/models/achievement.dart';
+import 'package:frontend/src/models/quiz.dart';
+import 'package:frontend/src/utils/fetch.dart';
+
+import '../models/user.dart';
 import '../widgets/point_last_week.dart';
 import '../widgets/rating.dart';
-import '../models/user.dart';
+import '../widgets/sum_points.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -140,7 +144,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           ))
                   : Text(user.contact)),
           Divider(),
-          _userStatsPoints()
+          _userStatsPoints(),
+          AchievementsList(
+            achievements: user.achievements,
+          ),
+          user.participating.isEmpty
+              ? const Text(
+                  'nothing in histrory, join a quiz and have fun, friend😃')
+              : QuizHistory(
+                  user: user,
+                ),
         ],
       ),
     ));
@@ -301,4 +314,134 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+class AchievementsList extends StatefulWidget {
+  final List achievements;
+  const AchievementsList({
+    Key? key,
+    required this.achievements,
+  }) : super(key: key);
+
+  @override
+  _AchievementsListState createState() => _AchievementsListState();
+}
+
+class _AchievementsListState extends State<AchievementsList> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: widget.achievements.length == 1
+            ? Card(
+                color: Colors.grey.shade200,
+                child: Column(
+                  children: [
+                    Text(widget.achievements.first['name'],
+                        style: const TextStyle(
+                          fontSize: 20,
+                        )),
+                    Text(widget.achievements.first['description'],
+                        style: const TextStyle(
+                          fontSize: 15,
+                        ))
+                  ],
+                ),
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2),
+                shrinkWrap: true,
+                itemBuilder: (context, index) => _achievementItem(index),
+                itemCount: widget.achievements.length,
+              ));
+  }
+
+  _achievementItem(int index) => SizedBox(
+        width: 100,
+        height: 100,
+        // decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(8),
+        //     border: Border(
+        //         left: BorderSide(
+        //           color: Colors.cyan,
+        //         ),
+        //         right: BorderSide(color: Colors.amber))),
+        child: Card(
+            color: Colors.grey.shade200,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.achievements[index]['name'],
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Divider(),
+                  Text(widget.achievements[index]['description'],
+                      style: TextStyle(fontSize: 15))
+                ])),
+      );
+}
+
+class QuizHistory extends StatefulWidget {
+  final User user;
+  const QuizHistory({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  _QuizHistoryState createState() => _QuizHistoryState();
+}
+
+class _QuizHistoryState extends State<QuizHistory> {
+  List _filter() {
+    List obj = [];
+    for (var item in widget.user.participating) {
+      if (DateTime.parse(item['date']).compareTo(DateTime.now()) < 0)
+        obj.add(item);
+    }
+    return obj;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List obj = _filter();
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: obj.length,
+        itemBuilder: (context, index) => _genCard(obj, index));
+  }
+
+  _genCard(List obj, int index) => Container(
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        padding: EdgeInsets.only(top: 10),
+        child: Card(
+            color: Colors.cyan,
+            child: Column(
+              children: [
+                Text(
+                  obj[index]['name'],
+                  style: const TextStyle(color: Colors.white),
+                ),
+                Divider(color: Colors.white),
+                Text(
+                  obj[index]['description'],
+                  style: const TextStyle(color: Colors.white),
+                ),
+                Divider(color: Colors.white),
+                Text(
+                  'Team: ',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                //todo: add team to history
+                // Wrap(children: List.generate(, (index) => null),),
+              ],
+            )),
+      );
 }

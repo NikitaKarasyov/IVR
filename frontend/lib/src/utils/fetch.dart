@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:frontend/src/models/QuizOfUser.dart';
 import 'package:http/http.dart' as http;
 import '../models/user.dart';
+import '../models/quiz.dart';
 import '../constants/api.dart';
 import 'dart:convert';
 
@@ -115,4 +117,75 @@ class UserFetch {
 
   sortByPoints(List<User> tmp_users) =>
       tmp_users.sort((a, b) => a.currentPoints.compareTo(b.currentPoints));
+}
+
+class QuizOfUserFetch {
+  List<QuizOfUser> qof = [];
+
+  QuizOfUserFetch() {
+    fetchQOF();
+  }
+
+  fetchQOF() async {
+    try {
+      http.Response response = await http.get(Uri.parse(api_quizOfUser));
+      var data = json.decode(response.body);
+      for (var item in data) {
+        print('item: $item');
+        qof.add(QuizOfUser(
+            quiz_id: item["quiz"], user_id: item["user"], id: item["id"]));
+      }
+    } catch (e) {
+      print("fetchQOF error");
+      print(e);
+    }
+  }
+
+  postQOF(QuizOfUser obj) async {
+    try {
+      Map data = {'id': obj.id, 'user': obj.user_id, 'quiz': obj.quiz_id};
+      http.Response response = await http.post(Uri.parse(api_quizOfUser),
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
+          },
+          body: json.encode(data));
+    } catch (e) {
+      print("postQOF error");
+      print(e);
+    }
+  }
+
+  deleteQOF(QuizOfUser obj) async {
+    try {
+      Map data = {'id': obj.id, 'user': obj.user_id, 'quiz': obj.quiz_id};
+      http.Response response =
+          await http.delete(Uri.parse(api_quizOfUser + obj.id.toString() + "/"),
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization":
+                    "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
+              },
+              body: json.encode(data));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<QuizOfUser>> getallAsync() async {
+    List<QuizOfUser> _qof = [];
+    try {
+      http.Response response = await http.get(Uri.parse(api_quizOfUser));
+      for (var item in json.decode(response.body)) {
+        print('item: $item');
+        _qof.add(QuizOfUser(
+            id: item['id'], quiz_id: item['quiz'], user_id: item['quiz']));
+      }
+    } catch (e) {
+      print("getAllAsync() [qof] error");
+      print(e);
+    }
+
+    return _qof;
+  }
 }

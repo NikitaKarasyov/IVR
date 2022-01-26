@@ -17,7 +17,7 @@ class AllPoints extends StatelessWidget {
         Container(
           alignment: Alignment.centerRight,
           child: Text(
-            allpoints.toString(),
+            "${allpoints.toString()}",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 64),
           ),
         ),

@@ -68,6 +68,8 @@ class QuizOfUser(models.Model):
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
 
+    def validate_unique(self, exclude=None):
+        qs = Quiz.objects.filter()
 
 class ThemeOfQuiz(models.Model):
     theme = models.ForeignKey('Theme', on_delete=models.CASCADE)

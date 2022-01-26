@@ -18,6 +18,6 @@ urlpatterns = [
     path('quiz-of-user/<int:pk>/', QuizOfUserDetail.as_view(), name='quiz-of-user_details'),
     path('theme-of-quiz/', ThemeOfQuizList.as_view(), name='theme_of_quiz'),
     path('theme-of-quiz/<int:pk>/', ThemeOfQuizDetail.as_view(), name='theme_of_quiz_details'),
-    path('user-of-quiz', UserOfQuizList.as_view(), name='user_of_quiz'),
-    path('user-of-quiz', UserOfQuizDetail.as_view(), name='user_of_quiz_details')
+    path('user-of-quiz/', UserOfQuizList.as_view(), name='user_of_quiz'),
+    path('user-of-quiz/', UserOfQuizDetail.as_view(), name='user_of_quiz_details')
 ]

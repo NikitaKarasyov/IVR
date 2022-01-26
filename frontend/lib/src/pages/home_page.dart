@@ -69,28 +69,30 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: [
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
-                    child: ListView(
-                        children: quizes.map((e) {
-                      return QuizCard(
-                        id: e.id,
-                        name: e.name,
-                        description: e.description,
-                        date: e.date,
-                        theme: e.quiz_theme,
-                        url: e.url,
-                        // currentUser: currentUser,
-                      );
-                    }).toList()),
-                    onRefresh: _refresh,
-                  ),
-            ProfilePage(user)
-          ].elementAt(_selectedIndex)),
+      body: SafeArea(
+        child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: [
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : RefreshIndicator(
+                      child: ListView(
+                          children: quizes.map((e) {
+                        return QuizCard(
+                          id: e.id,
+                          name: e.name,
+                          description: e.description,
+                          date: e.date,
+                          theme: e.quiz_theme,
+                          url: e.url,
+                          currentUser: user,
+                        );
+                      }).toList()),
+                      onRefresh: _refresh,
+                    ),
+              ProfilePage(user)
+            ].elementAt(_selectedIndex)),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: "Browse"),
@@ -108,6 +110,6 @@ class _HomePageState extends State<HomePage> {
     quizes = [];
     users = [];
     fetchData();
-    return Future.delayed(Duration(seconds: 5));
+    return Future.delayed(Duration(seconds: 1));
   }
 }

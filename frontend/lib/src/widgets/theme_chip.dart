@@ -4,7 +4,7 @@ import '../models/quiz_theme.dart';
 
 class ThemeChip extends StatelessWidget {
   final String name;
-  final Color color = Colors.deepOrange;
+  final Color color = Colors.amber;
   ThemeChip({Key? key, required this.name}) : super(key: key);
 
   @override
