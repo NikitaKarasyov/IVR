@@ -87,3 +87,9 @@ class UserOfQuizSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserOfQuiz
         fields = "__all__"
+
+
+class ThemeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Theme
+        fields = "__all__"

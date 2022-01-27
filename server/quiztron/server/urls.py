@@ -9,6 +9,8 @@ urlpatterns = [
     path('achievements/<int:pk>/', AchievementDetail.as_view(), name='achievement_details'),
     path('quizes/', QuizList.as_view(), name='quizes'),
     path('quizes/<int:pk>/', QuizDetail.as_view(), name='quiz_details'),
+    path('themes/', ThemeList.as_view(), name='themes'),
+    path('themes/<int:pk>/', ThemeDetail.as_view(), name='theme_details'),
 
     path('achievement-of-user/', AchievementOfUserList.as_view(), name='achievement_of_user'),
     path('achievement-of-user/<int:pk>/', AchievementOfUserDetail.as_view(), name='achievement_of_user_details'),

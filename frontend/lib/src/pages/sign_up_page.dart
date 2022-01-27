@@ -18,7 +18,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String email = "";
   String password = "";
   String confirmPassword = "";
-
+  String interests = "";
   bool _obscureText = true;
 
   List<User> users = UserFetch().getAll();
@@ -42,16 +42,16 @@ class _SignUpPageState extends State<SignUpPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "New here?",
-                      style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                           decoration: const InputDecoration(
-                              label: Text('username'),
+                              label: Text('username*'),
                               fillColor: Colors.white54,
                               focusColor: Colors.cyan,
                               filled: true,
@@ -69,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                           decoration: const InputDecoration(
-                              label: Text('email'),
+                              label: Text('email*'),
                               fillColor: Colors.white54,
                               focusColor: Colors.cyan,
                               filled: true,
@@ -88,11 +88,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: TextFormField(
                           obscureText: _obscureText,
                           decoration: InputDecoration(
-                              label: Text('password'),
+                              label: const Text('password*'),
                               fillColor: Colors.white54,
                               focusColor: Colors.cyan,
                               filled: true,
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8))),
                               suffixIcon: IconButton(
@@ -115,7 +115,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: TextFormField(
                           obscureText: _obscureText,
                           decoration: InputDecoration(
-                              label: Text('confirm password'),
+                              label: Text('confirm password*'),
                               fillColor: Colors.white54,
                               focusColor: Colors.cyan,
                               filled: true,
@@ -134,6 +134,21 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                           onChanged: (value) => confirmPassword = value),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                          obscureText: _obscureText,
+                          decoration: InputDecoration(
+                            label: Text('Your interests'),
+                            fillColor: Colors.white54,
+                            focusColor: Colors.cyan,
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                          ),
+                          onChanged: (value) => interests = value),
                     ),
                     TextButton(
                         onPressed: () {
@@ -172,12 +187,31 @@ class _SignUpPageState extends State<SignUpPage> {
                                     builder: (context) => HomePage(new_user)));
                           }
                         },
-                        child: Text('Sign up')),
+                        child: Text('Sign up',
+                            style: TextStyle(color: Colors.amber)
+                            // style: TextStyle(shadows: <Shadow>[
+                            //   Shadow(
+                            //     offset: Offset(5.0, 5.0),
+                            //     blurRadius: 3.0,
+                            //     color: Color.fromARGB(255, 255, 255, 255),
+                            //   ),
+                            // ]),
+                            )),
                     TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text('Back to Login'))
+                        child: Text(
+                          'Back to Login',
+                          style: TextStyle(color: Colors.amber),
+                          // style: TextStyle(shadows: <Shadow>[
+                          //   Shadow(
+                          //     offset: Offset(5.0, 5.0),
+                          //     blurRadius: 3.0,
+                          //     color: Color.fromARGB(255, 255, 255, 255),
+                          //   ),
+                          // ]),
+                        ))
                   ],
                 ),
               ),

@@ -49,6 +49,8 @@ class User(models.Model):
     points = models.ManyToManyField(Point, through='PointOfUser', related_name='points')
     achievements = models.ManyToManyField(Achievement, through='AchievementOfUser', related_name='achievements')
     participating = models.ManyToManyField(Quiz, through='QuizOfUser', related_name='participating')
+    interests = models.CharField(max_length=300, blank=True)
+
 
     def __str__(self):
         return self.name

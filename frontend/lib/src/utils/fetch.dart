@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:frontend/src/models/QuizOfUser.dart';
 import 'package:http/http.dart' as http;
-import '../models/user.dart';
-import '../models/quiz.dart';
+
+import 'package:frontend/src/models/QuizOfUser.dart';
+import 'package:frontend/src/models/quiz_theme.dart';
+
 import '../constants/api.dart';
-import 'dart:convert';
+import '../models/quiz.dart';
+import '../models/user.dart';
 
 class UserFetch {
   // final User user = User.UserDefault();
@@ -207,5 +210,27 @@ class QuizOfUserFetch {
     }
 
     return _qof;
+  }
+}
+
+class ThemeFetch {
+  List<QuizTheme> themes = [];
+  ThemeFetch() {
+    _fetchAll();
+  }
+
+  _fetchAll() async {
+    try {
+      http.Response response = await http.get(Uri.parse(api_themes),
+          headers: {'Content-type': 'application/json; charset=utf-8'});
+      var data = json.decode(utf8.decode(response.bodyBytes));
+      for (var item in data) {
+        print('item of data of _fetchAll [ThemeFetch] $item');
+        themes.add(QuizTheme(id: item['id'], name: item['name']));
+      }
+    } catch (e) {
+      print("_fetchAll [ThemeFetch] error: ");
+      print(e);
+    }
   }
 }

@@ -1,8 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/src/models/quiz.dart';
+import 'package:frontend/src/models/quiz_theme.dart';
+import 'package:frontend/src/utils/fetch.dart';
+import 'package:frontend/src/widgets/quiz_filter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'pastele.dart';
 import '../constants/api.dart';
 
 import '../models/user.dart';
@@ -13,7 +18,6 @@ import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
-
   const HomePage(this.user, {Key? key}) : super(key: key);
 
   @override
@@ -26,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   int _selectedIndex = 0;
   User user;
+  // late TabController _controller;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -64,6 +69,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     fetchData();
     super.initState();
+    // _controller = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -81,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                           Container(
                               alignment: Alignment.centerRight,
                               child: IconButton(
-                                  onPressed: null,
+                                  onPressed: () => _show(),
                                   icon: Icon(Icons.filter_list))),
                           Expanded(
                             child: ListView(
@@ -125,5 +137,66 @@ class _HomePageState extends State<HomePage> {
     return Future.delayed(Duration(seconds: 1));
   }
 
-  filter() {}
+  _show() {
+    Future<List<QuizTheme>> themes = Future.sync(() => ThemeFetch().themes);
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SingleChildScrollView(
+              child: DefaultTabController(
+                  length: 2,
+                  child: SizedBox(
+                    height: 600,
+                    width: 300,
+                    child: Scaffold(
+                        appBar: AppBar(
+                          bottom: TabBar(tabs: [Text('theme'), Text('date')]),
+                        ),
+                        body: TabBarView(children: [
+                          FutureBuilder<List<QuizTheme>>(
+                              future: themes,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasData &&
+                                    snapshot.connectionState ==
+                                        ConnectionState.done)
+                                  return Wrap(
+                                      children:
+                                          snapshot.data.map<Widget>((element) {
+                                    return FilterChip(
+                                      backgroundColor: colors[
+                                          Random().nextInt(colors.length)],
+                                      label: Text(element.name.toString()),
+                                      onSelected: (value) => null,
+                                    );
+                                  }).toList());
+                                else
+                                  return CircularProgressIndicator();
+                              }),
+                          ListView(
+                            shrinkWrap: true,
+                            children: [
+                              TextButton.icon(
+                                  onPressed: null,
+                                  icon: const Icon(Icons.date_range),
+                                  label: const Text("The nearest day")),
+                              TextButton.icon(
+                                  onPressed: null,
+                                  icon: Icon(Icons.date_range),
+                                  label: const Text('At weekend')),
+                              TextButton.icon(
+                                  onPressed: () => showTimePicker(
+                                      context: context,
+                                      initialTime:
+                                          TimeOfDay(hour: 4, minute: 20),
+                                      initialEntryMode:
+                                          TimePickerEntryMode.input),
+                                  icon: Icon(Icons.calendar_today),
+                                  label: Text("Pick a day"))
+                            ],
+                          )
+                        ])),
+                  )));
+        });
+  }
 }
