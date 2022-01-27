@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   void fetchData() async {
     try {
       http.Response quizResponse = await http.get(Uri.parse(api_quizes));
-      var quizData = json.decode(quizResponse.body);
+      var quizData = json.decode(utf8.decode(quizResponse.bodyBytes));
       print(quizData);
       quizData.forEach((quiz) {
         Quiz q = Quiz(
@@ -76,20 +76,32 @@ class _HomePageState extends State<HomePage> {
               isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : RefreshIndicator(
-                      child: ListView(
-                          children: quizes.map((e) {
-                        return QuizCard(
-                          id: e.id,
-                          name: e.name,
-                          description: e.description,
-                          date: e.date,
-                          theme: e.quiz_theme,
-                          url: e.url,
-                          currentUser: user,
-                        );
-                      }).toList()),
+                      child: Column(
+                        children: [
+                          Container(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Icons.filter_list))),
+                          Expanded(
+                            child: ListView(
+                                children: quizes.map((e) {
+                              return QuizCard(
+                                id: e.id,
+                                name: e.name,
+                                description: e.description,
+                                date: e.date,
+                                theme: e.quiz_theme,
+                                url: e.url,
+                                currentUser: user,
+                              );
+                            }).toList()),
+                          ),
+                        ],
+                      ),
                       onRefresh: _refresh,
                     ),
+              // ),
               ProfilePage(user)
             ].elementAt(_selectedIndex)),
       ),
@@ -112,4 +124,6 @@ class _HomePageState extends State<HomePage> {
     fetchData();
     return Future.delayed(Duration(seconds: 1));
   }
+
+  filter() {}
 }

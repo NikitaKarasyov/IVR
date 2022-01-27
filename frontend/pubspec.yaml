@@ -18,7 +18,6 @@ dependencies:
   flutter_svg_provider: 
   flutter_localizations:
     sdk: flutter
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

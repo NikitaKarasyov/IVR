@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:frontend/src/models/QuizOfUser.dart';
 import 'package:http/http.dart' as http;
@@ -20,8 +21,12 @@ class UserFetch {
   Future<List<User>> getAllAsync() async {
     List<User> _users = [];
     try {
-      http.Response userResponse = await http.get(Uri.parse(api_users));
-      var userData = json.decode(userResponse.body);
+      http.Response userResponse =
+          await http.get(Uri.parse(api_users), headers: {
+        // HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+        // 'Accept-Encoding': 'utf-8'
+      });
+      var userData = json.decode(utf8.decode(userResponse.bodyBytes));
       userData.forEach((user) {
         User u = User(
           id: user['id'],
@@ -44,8 +49,12 @@ class UserFetch {
 
   _fetchData() async {
     try {
-      http.Response userResponse = await http.get(Uri.parse(api_users));
-      var userData = json.decode(userResponse.body);
+      http.Response userResponse =
+          await http.get(Uri.parse(api_users), headers: {
+        // HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8 ',
+        // 'Accept-Encoding': 'urf-8'
+      });
+      var userData = json.decode(utf8.decode(userResponse.bodyBytes));
       userData.forEach((user) {
         User u = User(
           id: user['id'],
@@ -68,6 +77,7 @@ class UserFetch {
   correct(User input) async {
     try {
       http.Response response = await http.get(Uri.parse(api_users));
+      // headers: {'Content-Type': 'application/json; charset=utf-8'});
     } catch (e) {
       print(e);
     }
@@ -84,7 +94,7 @@ class UserFetch {
     try {
       var response = await http
           .post(Uri.parse(endpoint), body: json.encode(data), headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json; charset=utf-8",
         "Authorization": "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
       });
       print(response.headers);
@@ -107,7 +117,7 @@ class UserFetch {
     try {
       var response = await http
           .put(Uri.parse(api_users), body: json.encode(data), headers: {
-        "Content-Type": "application/json",
+        // "Content-Type": "application/json; ; charset=utf-8",
         "Authorization": "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
       });
     } catch (e) {
@@ -128,8 +138,14 @@ class QuizOfUserFetch {
 
   fetchQOF() async {
     try {
-      http.Response response = await http.get(Uri.parse(api_quizOfUser));
-      var data = json.decode(response.body);
+      http.Response response =
+          await http.get(Uri.parse(api_quizOfUser), headers: {
+        HttpHeaders.contentTypeHeader: 'application/json; ; charset=utf-8',
+        'Accept-Encoding': 'utf-8',
+      });
+      // print(
+      // '---------- RESPONSE [fetchQOF]: ${utf8.decode(response.bodyBytes).toString()}');
+      var data = json.decode(utf8.decode(response.bodyBytes));
       for (var item in data) {
         print('item: $item');
         qof.add(QuizOfUser(
@@ -146,7 +162,7 @@ class QuizOfUserFetch {
       Map data = {'id': obj.id, 'user': obj.user_id, 'quiz': obj.quiz_id};
       http.Response response = await http.post(Uri.parse(api_quizOfUser),
           headers: {
-            "Content-Type": "application/json",
+            HttpHeaders.contentTypeHeader: "application/json;  charset=utf-8",
             "Authorization": "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
           },
           body: json.encode(data));
@@ -162,7 +178,7 @@ class QuizOfUserFetch {
       http.Response response =
           await http.delete(Uri.parse(api_quizOfUser + obj.id.toString() + "/"),
               headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json; charset=utf-8",
                 "Authorization":
                     "TOKEN 8b220811a6b2cfe4bfe129bbce2c55c5cb014fda"
               },
@@ -175,8 +191,12 @@ class QuizOfUserFetch {
   Future<List<QuizOfUser>> getallAsync() async {
     List<QuizOfUser> _qof = [];
     try {
-      http.Response response = await http.get(Uri.parse(api_quizOfUser));
-      for (var item in json.decode(response.body)) {
+      http.Response response =
+          await http.get(Uri.parse(api_quizOfUser), headers: {
+        HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
+      });
+      print('---------- RESPONSE [getAllAsync]: ${response.toString()})');
+      for (var item in json.decode(utf8.decode(response.bodyBytes))) {
         print('item: $item');
         _qof.add(QuizOfUser(
             id: item['id'], quiz_id: item['quiz'], user_id: item['quiz']));

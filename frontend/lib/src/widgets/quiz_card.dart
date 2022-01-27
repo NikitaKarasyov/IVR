@@ -178,7 +178,7 @@ class _QuizCardState extends State<QuizCard> {
                       Icons.group,
                       color: Colors.white,
                     ),
-                    onPressed: null,
+                    onPressed: groupUp(widget.currentUser, widget.id),
                   ),
                 )
               ],
@@ -212,4 +212,6 @@ class _QuizCardState extends State<QuizCard> {
       p = !p;
     });
   }
+
+  groupUp(User user, int id) {}
 }
